@@ -1,43 +1,38 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import React, { useState } from "react";
 
-const initialSlots = [
-  "10:00 - 11:00",
-  "11:30 - 12:30",
-  "13:00 - 14:00",
-  "14:30 - 15:30",
-  "16:00 - 17:00",
-];
-
-export default function BookingSystem() {
+function BookingSystem() {
   const [bookedSlots, setBookedSlots] = useState([]);
+  const [currentSlot, setCurrentSlot] = useState("");
 
-  const handleBooking = (slot) => {
-    if (!bookedSlots.includes(slot)) {
-      setBookedSlots([...bookedSlots, slot]);
+  const handleBooking = () => {
+    if (currentSlot && !bookedSlots.includes(currentSlot)) {
+      setBookedSlots([...bookedSlots, currentSlot]);
+      alert(`Slot ${currentSlot} has been booked!`);
+    } else {
+      alert("This slot is already booked or invalid.");
     }
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">Szabadulószoba Időpontfoglaló</h1>
-      <div className="space-y-2">
-        {initialSlots.map((slot) => (
-          <Card key={slot} className="p-2">
-            <CardContent className="flex justify-between items-center">
-              <span>{slot}</span>
-              <Button
-                onClick={() => handleBooking(slot)}
-                disabled={bookedSlots.includes(slot)}
-                className={bookedSlots.includes(slot) ? "bg-gray-400" : "bg-blue-500"}
-              >
-                {bookedSlots.includes(slot) ? "Foglalt" : "Foglalás"}
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+    <div>
+      <h1>Booking System</h1>
+      <input
+        type="text"
+        placeholder="Enter Slot Time"
+        value={currentSlot}
+        onChange={(e) => setCurrentSlot(e.target.value)}
+      />
+      <button onClick={handleBooking}>Book Slot</button>
+      <div>
+        <h2>Booked Slots</h2>
+        <ul>
+          {bookedSlots.map((slot, index) => (
+            <li key={index}>{slot}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 }
+
+export default BookingSystem;
